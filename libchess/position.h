@@ -4,7 +4,7 @@ position.h - Source Code for ElephantEye, Part III
 ElephantEye - a Chinese Chess Program (UCCI Engine)
 Designed by Morning Yellow, Version: 3.3, Last Modified: Mar. 2012
 Copyright (C) 2004-2012 www.xqbase.com
-Copyright (C) 2025 Xiaotian Wu <yetist@gmail.com>
+Copyright (c) 2025 yetist <yetist@gmail.com>
 
 This library is free software; you can redistribute it and/or
 modify it under the terms of the GNU Lesser General Public

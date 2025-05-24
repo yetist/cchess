@@ -6,7 +6,7 @@
 #include <stdio.h>
 #include <locale.h>
 #include <glib.h>
-#include "chinese-chess.h"
+#include "cchess.h"
 
 static gboolean do_step(CChess *chess, int *status, const gchar* pgn)
 {
@@ -156,14 +156,12 @@ static void test_board_fen(void)
   g_assert_cmpstr (fen, ==, "rnbakabnr/9/1c5c1/p1p1p1p1p/9/9/P1P1P1P1P/1C2C4/9/RNBAKABNR b");
   g_free(fen);
 
-  cchess_flip_board(chess);
+  do_step(chess, &status, "马8进7");
 
   fen = cchess_board_to_fen (chess);
-  g_assert_cmpstr (fen, ==, "RNBAKABNR/9/1C5C1/P1P1P1P1P/9/9/p1p1p1p1p/1c5c1/9/rnbakabnr w");
+  g_assert_cmpstr (fen, ==, "rnbakab1r/9/1c4nc1/p1p1p1p1p/9/9/P1P1P1P1P/1C2C4/9/RNBAKABNR w");
   g_free(fen);
 
-  //str = cchess_board_text(chess);
-  //printf("%s\n", str); g_free(str);
   g_object_unref(chess);
 }
 
@@ -188,8 +186,7 @@ int main (int argc, char* argv[])
   g_setenv("LC_ALL", "zh_CN.utf8", TRUE);
   setlocale (LC_ALL, "");
   main2();
-  //  g_test_init (&argc, &argv, NULL);
-  //  g_test_add_func ("/board/fen", test_board_fen);
-  //  return g_test_run ();
-  return 0;
+  g_test_init (&argc, &argv, NULL);
+  g_test_add_func ("/board/fen", test_board_fen);
+  return g_test_run ();
 }

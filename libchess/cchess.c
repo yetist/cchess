@@ -1,4 +1,4 @@
-// SPDX-License-Identifier: GPL-2.0-or-later
+// SPDX-License-Identifier: LGPL-2.0-or-later
 /*
  * Copyright (c) 2025 yetist <yetist@gmail.com>
  */

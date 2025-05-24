@@ -1,3 +1,7 @@
+/* SPDX-License-Identifier: LGPL-2.0-or-later */
+/*
+ * Copyright (c) 2025 yetist <yetist@gmail.com>
+ */
 #include <stdint.h>
 
 #ifndef RC4PRNG_H
