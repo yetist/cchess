@@ -10,6 +10,7 @@
 G_BEGIN_DECLS
 
 #define CHINESE_TYPE_CHESS              (cchess_get_type ())
+
 G_DECLARE_FINAL_TYPE (CChess, cchess, CHINESE, CHESS, GObject)
 
 CChess*       cchess_new                (void);
@@ -32,7 +33,7 @@ void          cchess_add_piece          (CChess *chess, long sq, long pc, gboole
 
 // 生成全部合理着法
 glong         cchess_gen_moves          (CChess *chess, glong* lpmv);
-gboolean      cchess_try_move           (CChess *chess, int* lpStatus, int mv);
+gboolean      cchess_try_move           (CChess *chess, int* status, int mv);
 void          cchess_undo_move          (CChess *chess);
 
 gchar*        cchess_fen_mirror         (const gchar* fen);
@@ -53,9 +54,9 @@ gchar*        cchess_move_to_ucci       (gint mv);
 //2. 上一步的源和目标
 
 // 执行“空着”，该功能目前仅用在“搜索树分析器”中
-gboolean      cchess_try_null        (CChess *chess);
+gboolean      cchess_try_null           (CChess *chess);
 // 撤消“空着”，该功能目前仅用在“搜索树分析器”中
-void          cchess_undo_null       (CChess *chess);
+void          cchess_undo_null          (CChess *chess);
 #if 0
 const gchar*  cchess_version         (void);
 #endif
