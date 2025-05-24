@@ -33,19 +33,17 @@ extern PreEval preEval;
 
 /* ElephantEye源程序使用的匈牙利记号约定：
  *
- * sq: 格子序号(整数，从0到255，参阅"pregen.cpp")
- * pc: 棋子序号(整数，从0到47，参阅"position.cpp")
- * pt: 棋子类型序号(整数，从0到6，参阅"position.cpp")
- * mv: 着法(整数，从0到65535，参阅"position.cpp")
+ * sq: 格子序号(整数，从0到255)
+ * pc: 棋子序号(整数，从0到47)
+ * pt: 棋子类型序号(整数，从0到6)
+ * mv: 着法(整数，从0到65535)
  * sd: 走子方(整数，0代表红方，1代表黑方)
- * vl: 局面价值(整数，从"-MATE_VALUE"到"MATE_VALUE"，参阅"position.cpp")
- * (注：以上五个记号可与uc、dw等代表整数的记号配合使用)
+ * vl: 局面价值(整数，从"-MATE_VALUE"到"MATE_VALUE")
+ * (注：以上四个记号可与uc、dw等代表整数的记号配合使用)
  * pos: 局面(Position类型，参阅"position.h")
  * sms: 位行和位列的着法生成预置结构(参阅"pregen.h")
  * smv: 位行和位列的着法判断预置结构(参阅"pregen.h")
  */
-
-// 本模块涉及多个"Position"的成员，用"this->"标记出来以方便辨认
 
 // 棋子类型对应的棋子符号
 const char* cszPieceBytes = "KABNRCP";
@@ -1579,46 +1577,6 @@ Position_RepStatus (Position* pos, int nRecur)
     }
     return REP_NONE;
 }
-
-// 以上是一些着法检测过程
-
-/*
-genmoves.cpp - Source Code for ElephantEye, Part IV
-
-ElephantEye - a Chinese Chess Program (UCCI Engine)
-Designed by Morning Yellow, Version: 3.0, Last Modified: Nov. 2007
-Copyright (C) 2004-2007 www.elephantbase.net
-
-This library is free software; you can redistribute it and/or
-modify it under the terms of the GNU Lesser General Public
-License as published by the Free Software Foundation; either
-version 2.1 of the License, or (at your option) any later version.
-
-This library is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-Lesser General Public License for more details.
-
-You should have received a copy of the GNU Lesser General Public
-License along with this library; if not, write to the Free Software
-Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
-*/
-
-/* ElephantEye源程序使用的匈牙利记号约定：
- *
- * sq: 格子序号(整数，从0到255，参阅"pregen.cpp")
- * pc: 棋子序号(整数，从0到47，参阅"position.cpp")
- * pt: 棋子类型序号(整数，从0到6，参阅"position.cpp")
- * mv: 着法(整数，从0到65535，参阅"position.cpp")
- * sd: 走子方(整数，0代表红方，1代表黑方)
- * vl: 局面价值(整数，从"-MATE_VALUE"到"MATE_VALUE"，参阅"position.cpp")
- * (注：以上四个记号可与uc、dw等代表整数的记号配合使用)
- * pos: 局面(Position类型，参阅"position.h")
- * sms: 位行和位列的着法生成预置结构(参阅"pregen.h")
- * smv: 位行和位列的着法判断预置结构(参阅"pregen.h")
- */
-
-// 本模块只涉及到"Position"中的"sdPlayer"、"ucpcSquares"和"ucsqPieces"三个成员，故省略前面的"this->"
 
 // 棋子保护判断
 bool

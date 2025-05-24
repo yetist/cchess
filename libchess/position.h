@@ -1,9 +1,10 @@
 /*
-position.h/position.cpp - Source Code for ElephantEye, Part III
+position.h - Source Code for ElephantEye, Part III
 
 ElephantEye - a Chinese Chess Program (UCCI Engine)
 Designed by Morning Yellow, Version: 3.3, Last Modified: Mar. 2012
 Copyright (C) 2004-2012 www.xqbase.com
+Copyright (C) 2025 Xiaotian Wu <yetist@gmail.com>
 
 This library is free software; you can redistribute it and/or
 modify it under the terms of the GNU Lesser General Public
@@ -22,22 +23,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 
 #include <string.h>
 #include <stdbool.h>
-//#include "base.h"
 #include "pregen.h"
-
-/* ElephantEye源程序使用的匈牙利记号约定：
- *
- * sq: 格子序号(整数，从0到255，参阅"pregen.cpp")
- * pc: 棋子序号(整数，从0到47，参阅"position.cpp")
- * pt: 棋子类型序号(整数，从0到6，参阅"position.cpp")
- * mv: 着法(整数，从0到65535，参阅"position.cpp")
- * sd: 走子方(整数，0代表红方，1代表黑方)
- * vl: 局面价值(整数，从"-MATE_VALUE"到"MATE_VALUE"，参阅"position.cpp")
- * (注：以上四个记号可与uc、dw等代表整数的记号配合使用)
- * pos: 局面(Position类型，参阅"position.h")
- * sms: 位行和位列的着法生成预置结构(参阅"pregen.h")
- * smv: 位行和位列的着法判断预置结构(参阅"pregen.h")
- */
 
 #ifndef POSITION_H
 #define POSITION_H
@@ -48,7 +34,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 #define DRAW_MOVES   100      // 默认的和棋着法数，ElephantEye设定在50回合即100步，但将军和应将不计入其中
 
 #define MATE_VALUE   10000            // 最高分值，即将死的分值
-#define BAN_VALUE   MATE_VALUE - 100  // 长将判负的分值，低于该值将不写入置换表(参阅"hash.cpp")
+#define BAN_VALUE   MATE_VALUE - 100  // 长将判负的分值，低于该值将不写入置换表
 #define WIN_VALUE   MATE_VALUE - 200  // 搜索出胜负的分值界限，超出此值就说明已经搜索出杀棋了
 #define NULLOKAY_MARGIN   200         // 空着裁剪可以不检验的子力价值边界
 #define NULLSAFE_MARGIN   400         // 允许使用空着裁剪的条件的子力价值边界
@@ -100,9 +86,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 
 #define DEL_PIECE  true // 函数"Position::AddPiece()"的选项
 
-//extern const char *const cszStartFen;     // 起始局面的FEN串
-//extern const char *const cszPieceBytes;   // 棋子类型对应的棋子符号
-//extern const int cnPieceTypes[48];        // 棋子序号对应的棋子类型
 extern const int cnSimpleValues[48];      // 棋子的简单分值
 extern const uint8_t cucsqMirrorTab[256]; // 坐标的镜像(左右对称)数组
 
@@ -220,7 +203,7 @@ void Position_UndoNullMove (Position* pos);
 // 生成FEN串
 void Position_ToFen (Position* pos, char *szFen);
 
-// 着法生成过程，由于这些过程代码量特别大，所以把他们都集中在"genmoves.cpp"中
+// 着法生成过程
 // 棋子保护判断
 bool Position_Protected (Position* pos, int sd, int sqSrc, int sqExcept /* ?=0 */);
 
