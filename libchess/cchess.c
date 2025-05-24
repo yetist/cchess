@@ -8,7 +8,7 @@
 #include <string.h>
 //#include "base.h"
 #include "position.h"
-#include "chinese-chess.h"
+#include "cchess.h"
 
 // 以下常量规定了"TryMove()"的返回状态
 #define MOVE_ILLEGAL   256        // 不合法的着法
@@ -121,7 +121,7 @@ extern PreEval preEval;
 static GParamSpec *widget_props[NUM_PROPERTIES] = { NULL, };
 //static guint signals[LAST_SIGNAL] = { 0 };
 
-struct _ChineseChess
+struct _CChess
 {
   GObject         object;
   Position  pos;
@@ -134,11 +134,11 @@ union _Action {
   guint32 code;
 };
 
-G_DEFINE_TYPE (ChineseChess, chinese_chess, G_TYPE_OBJECT);
+G_DEFINE_TYPE (CChess, cchess, G_TYPE_OBJECT);
 
-static void chinese_chess_set_property (GObject *object, guint prop_id, const GValue *value, GParamSpec *pspec)
+static void cchess_set_property (GObject *object, guint prop_id, const GValue *value, GParamSpec *pspec)
 {
-  ChineseChess *chess;
+  CChess *chess;
 
   chess = CHINESE_CHESS (object);
 
@@ -150,9 +150,9 @@ static void chinese_chess_set_property (GObject *object, guint prop_id, const GV
   }
 }
 
-static void chinese_chess_get_property (GObject *object, guint prop_id, GValue *value, GParamSpec *pspec)
+static void cchess_get_property (GObject *object, guint prop_id, GValue *value, GParamSpec *pspec)
 {
-  ChineseChess *chess;
+  CChess *chess;
 
   chess = CHINESE_CHESS (object);
 
@@ -164,35 +164,35 @@ static void chinese_chess_get_property (GObject *object, guint prop_id, GValue *
   }
 }
 
-static void chinese_chess_class_init (ChineseChessClass *klass)
+static void cchess_class_init (CChessClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
-  object_class->set_property = chinese_chess_set_property;
-  object_class->get_property = chinese_chess_get_property;
+  object_class->set_property = cchess_set_property;
+  object_class->get_property = cchess_get_property;
 }
 
-static void chinese_chess_init (ChineseChess *chess)
+static void cchess_init (CChess *chess)
 {
   PreGenInit ();
 }
 
-ChineseChess* chinese_chess_new (void)
+CChess* cchess_new (void)
 {
   return g_object_new (CHINESE_TYPE_CHESS, NULL);
 }
 
-void chinese_chess_start_board (ChineseChess *chess)
+void cchess_start_board (CChess *chess)
 {
   Position_FromFen (&chess->pos, "rnbakabnr/9/1c5c1/p1p1p1p1p/9/9/P1P1P1P1P/1C5C1/9/RNBAKABNR w");
 }
 
-void chinese_chess_fen_to_board (ChineseChess *chess, const gchar* fen)
+void cchess_fen_to_board (CChess *chess, const gchar* fen)
 {
   Position_FromFen (&chess->pos, fen);
 }
 
-gchar* chinese_chess_board_to_fen (ChineseChess *chess)
+gchar* cchess_board_to_fen (CChess *chess)
 {
   gchar *fen = NULL;
 
@@ -201,19 +201,19 @@ gchar* chinese_chess_board_to_fen (ChineseChess *chess)
   return fen;
 }
 
-void chinese_chess_clear_board (ChineseChess *chess)
+void cchess_clear_board (CChess *chess)
 {
   Position_ClearBoard (&chess->pos);
 }
 
 // 局面镜像
-void chinese_chess_board_mirror (ChineseChess *chess)
+void cchess_board_mirror (CChess *chess)
 {
   Position_Mirror (&chess->pos);
 }
 
 // 红黑互换, 交换走棋方, 红先变成黑先
-void chinese_chess_exchange_side (ChineseChess *chess)
+void cchess_exchange_side (CChess *chess)
 {
   Position *pos = &chess->pos;
   int i, sq;
@@ -239,7 +239,7 @@ void chinese_chess_exchange_side (ChineseChess *chess)
 }
 
 // 翻转棋盘
-void chinese_chess_flip_board (ChineseChess *chess)
+void cchess_flip_board (CChess *chess)
 {
   Position *pos = &chess->pos;
   int i, sq;
@@ -300,7 +300,7 @@ static gchar* g_utf8_get_nth_char(const gchar* p, gint n)
 }
 
 // 生成文本棋盘
-gchar* chinese_chess_board_text (ChineseChess *chess)
+gchar* cchess_board_text (CChess *chess)
 {
   gint i, j, pc;
   GString* string = NULL;
@@ -332,7 +332,7 @@ gchar* chinese_chess_board_text (ChineseChess *chess)
 }
 
 // 对FEN串作镜像(只要识别行分隔符"/"，行内字符串顺序颠倒即可)
-gchar* chinese_chess_fen_mirror (const gchar* fen)
+gchar* cchess_fen_mirror (const gchar* fen)
 {
   int i, j;
   const char *p;
@@ -446,7 +446,7 @@ static int Byte2Digit (int nArg)
  * 而对于其他情况则无法作出正确转换。
  * 注意：符号表示由4个字节构成，所以可以用一个"uint32_t"类型作快速传输(同理，汉字表示用"uint64_t")。
  */
-guint32 chinese_chess_file_mirror (guint32 filestr)
+guint32 cchess_file_mirror (guint32 filestr)
 {
   int nPos, nFile, pt;
   Action Ret;
@@ -490,17 +490,17 @@ guint32 chinese_chess_file_mirror (guint32 filestr)
 }
 
 // 把局面设成“不可逆”
-void chinese_chess_set_irrev (ChineseChess *chess)
+void cchess_set_irrev (CChess *chess)
 {
   Position_SetIrrev (&chess->pos);
 }
 
-void chinese_chess_promotion (ChineseChess *chess, gboolean promotion)
+void cchess_promotion (CChess *chess, gboolean promotion)
 {
   preEval.bPromotion = promotion != FALSE;
 }
 
-gboolean chinese_chess_can_promote (ChineseChess *chess, long sq)
+gboolean cchess_can_promote (CChess *chess, long sq)
 {
   int pt;
   Position *pos = &chess->pos;
@@ -513,13 +513,13 @@ gboolean chinese_chess_can_promote (ChineseChess *chess, long sq)
   return FALSE;
 }
 
-void chinese_chess_add_piece (ChineseChess *chess, long sq, long pc, gboolean delete)
+void cchess_add_piece (CChess *chess, long sq, long pc, gboolean delete)
 {
   Position_AddPiece (&chess->pos, sq, pc, !delete);
 }
 
 // 尝试某个着法，并返回着法状态，参阅"cchess.h"
-gboolean chinese_chess_try_move (ChineseChess *chess, int* nStatus, int mv)
+gboolean cchess_try_move (CChess *chess, int* nStatus, int mv)
 {
   Position *pos = &chess->pos;
   if (!Position_LegalMove (pos, mv))
@@ -541,13 +541,13 @@ gboolean chinese_chess_try_move (ChineseChess *chess, int* nStatus, int mv)
   return true;
 }
 
-void chinese_chess_undo_move (ChineseChess *chess)
+void cchess_undo_move (CChess *chess)
 {
   Position_UndoMakeMove (&chess->pos);
 }
 
 // 生成全部合理着法
-glong chinese_chess_gen_moves (ChineseChess *chess, glong* lpmv)
+glong cchess_gen_moves (CChess *chess, glong* lpmv)
 {
   int i, nTotal, nLegal;
   Move mvs[MAX_GEN_MOVES];
@@ -657,7 +657,7 @@ static const char ccDirect2Byte[4] = {
 // 将汉字表示转换为着法符号表示
 // 如: 炮二平五 => C2.5
 // 士四变兵 => A4=P
-guint32 chinese_chess_chinese_to_action (const gchar* utf8str)
+guint32 cchess_chinese_to_action (const gchar* utf8str)
 {
   int nPos;
   Action Ret;
@@ -692,7 +692,7 @@ int Byte2Pos (gchar nArg)
 }
 
 // 将着法符号表示转换为汉字表示
-gchar* chinese_chess_action_to_chinese (guint32 action, int player)
+gchar* cchess_action_to_chinese (guint32 action, int player)
 {
   int nPos;
   char *lpArg;
@@ -783,7 +783,7 @@ static int FIRST_PIECE (int pt, int pc)
  * 在棋谱的快速时，允许只使用数字键盘，因此1到7依次代表帅(将)到兵(卒)这七种棋子，"File2Move()"函数也考虑到了这个问题。
  * C2.5 =>
  */
-int chinese_chess_action_to_move (ChineseChess *chess, guint32 action)
+int cchess_action_to_move (CChess *chess, guint32 action)
 {
   int i, j, nPos, pt, sq, nPieceNum;
   int xSrc, ySrc, xDst, yDst;
@@ -964,7 +964,7 @@ int chinese_chess_action_to_move (ChineseChess *chess, guint32 action)
 }
 
 // 将内部着法表示转换为纵线符号
-guint32 chinese_chess_move_to_action (ChineseChess *chess, int mv)
+guint32 cchess_move_to_action (CChess *chess, int mv)
 {
   Position *pos = &chess->pos;
   {
@@ -1072,7 +1072,7 @@ guint32 chinese_chess_move_to_action (ChineseChess *chess, int mv)
 }
 
 // 执行“空着”，该功能目前仅用在“搜索树分析器”中
-gboolean chinese_chess_try_null (ChineseChess *chess)
+gboolean cchess_try_null (CChess *chess)
 {
   Position *pos = &chess->pos;
   if (Position_LastMove (pos).ChkChs > 0)
@@ -1085,13 +1085,13 @@ gboolean chinese_chess_try_null (ChineseChess *chess)
 }
 
 // 撤消“空着”，该功能目前仅用在“搜索树分析器”中
-void chinese_chess_undo_null (ChineseChess *chess)
+void cchess_undo_null (CChess *chess)
 {
   Position *pos = &chess->pos;
   Position_UndoNullMove (pos);
 }
 
-gchar* chinese_chess_action_to_wxf (guint32 action)
+gchar* cchess_action_to_wxf (guint32 action)
 {
   Action act;
   gchar *str;
@@ -1103,7 +1103,7 @@ gchar* chinese_chess_action_to_wxf (guint32 action)
 }
 
 // 把字符串转换成着法
-int chinese_chess_ucci_to_move (const gchar *str)
+int cchess_ucci_to_move (const gchar *str)
 {
   gint mv;
   guint32 ucci;
@@ -1114,7 +1114,7 @@ int chinese_chess_ucci_to_move (const gchar *str)
 }
 
 // 把着法转换成字符串
-gchar* chinese_chess_move_to_ucci (gint mv)
+gchar* cchess_move_to_ucci (gint mv)
 {
   guint32 ucci;
 
@@ -1131,7 +1131,7 @@ gchar* chinese_chess_move_to_ucci (gint mv)
  * 起点坐标：0xcd, 其中低4位 0xd 是x 坐标， 高4位0xc是 y 坐标
  * 终点坐标：0xab,其中低4位 0xb 是x 坐标， 高4位0xa是 y 坐标
  */
-int chinese_chess_get_last_move (ChineseChess *chess)
+int cchess_get_last_move (CChess *chess)
 {
   Position *pos = &chess->pos;
   int src, dst, src_mv, dst_mv, mv;
