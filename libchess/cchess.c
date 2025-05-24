@@ -118,13 +118,12 @@ enum {
 };
 
 extern PreEval preEval;
-static GParamSpec *widget_props[NUM_PROPERTIES] = { NULL, };
-//static guint signals[LAST_SIGNAL] = { 0 };
 
 struct _CChess
 {
-  GObject         object;
+  GObject   object;
   Position  pos;
+  gboolean  board_flipped;
 };
 
 // 着法符号
@@ -175,6 +174,7 @@ static void cchess_class_init (CChessClass *klass)
 static void cchess_init (CChess *chess)
 {
   PreGenInit ();
+  chess->board_flipped = FALSE;
 }
 
 CChess* cchess_new (void)
@@ -261,6 +261,7 @@ void cchess_flip_board (CChess *chess)
       Position_AddPiece (pos, SQUARE_FLIP (sq), i, false);
     }
   }
+  chess->board_flipped = TRUE;
 }
 
 // 文本棋盘的棋盘字符
@@ -570,8 +571,6 @@ glong cchess_gen_moves (CChess *chess, glong* lpmv)
 static gint Word2Pos (gunichar ch)
 {
   int i;
-
-  int DIRECT_TO_POS = 5;
 
   if (ch == g_utf8_get_nth_unichar(posit_word, 7) || ch == g_utf8_get_nth_unichar(posit_word, 8))
   {

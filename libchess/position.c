@@ -2530,6 +2530,8 @@ Position_ChasedBy (Position* pos, int mv)
             }
         }
         break;
+    default:
+      break;
     }
 
     return 0;
